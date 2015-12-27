@@ -21,7 +21,8 @@ public class Utility {
     private static final String DISCOVER_MOVIES_API = "discover/movie";
     private static final String INPUT_DATE_FORMAT = "yyyy-MM-dd";
     private static final String OUTPUT_DATE_FORMAT = "MMM yyyy";
-    public static final String MOVIE = "movie";
+    public static final String MOVIE_KEY = "com.udacity.moviespot.movie.par";
+    public static final String MOVIES_KEY = "com.udacity.moviespot.movies.par";
     public static final String UNKNOWN = "Unknown";
 
     public static boolean isInternetConnected(Context context) {

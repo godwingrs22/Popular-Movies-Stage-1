@@ -69,7 +69,11 @@ public class MoviesAdapter extends BaseAdapter {
         moviesViewHolder.popularityTextView.setText(movies.get(position).getPopularity());
 
         String posterImageUrl = Utility.getImageUrl("w500", movies.get(position).getPosterImage());
-        Picasso.with(context).load(posterImageUrl).into(moviesViewHolder.posterImageView);
+        Picasso.with(context)
+                .load(posterImageUrl)
+                .placeholder(R.drawable.movie_placeholder)
+                .error(R.drawable.error_placeholder)
+                .into(moviesViewHolder.posterImageView);
         moviesViewHolder.posterImageView.setAdjustViewBounds(true);
 
         moviesViewHolder.viewMore.setOnClickListener(new View.OnClickListener() {

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -21,7 +22,7 @@ import com.udacity.moviespot.core.MovieManager;
 import com.udacity.moviespot.model.Movie;
 import com.udacity.moviespot.utils.Utility;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -42,9 +43,20 @@ public class PopularMoviesFragment extends Fragment {
     private MovieManager movieManager;
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(Utility.MOVIES_KEY, (ArrayList<? extends Parcelable>) movies);
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        if (savedInstanceState == null) {
+            movies = new ArrayList<>();
+        } else {
+            movies = (List<Movie>) savedInstanceState.get(Utility.MOVIES_KEY);
+        }
     }
 
     @Nullable
@@ -52,9 +64,7 @@ public class PopularMoviesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_popular_movies, container, false);
         ButterKnife.bind(this, view);
-        movies = new LinkedList<>();
         movieManager = new MovieManager();
-
         moviesAdapter = new MoviesAdapter(getContext(), movies);
         moviesGridView.setAdapter(moviesAdapter);
 
@@ -64,7 +74,7 @@ public class PopularMoviesFragment extends Fragment {
     @OnItemClick(R.id.gridview_popular_movies)
     public void callDetailActivity(int position) {
         Movie movie = movies.get(position);
-        Intent intent = new Intent(getActivity(), DetailMovieActivity.class).putExtra(Utility.MOVIE, movie);
+        Intent intent = new Intent(getActivity(), DetailMovieActivity.class).putExtra(Utility.MOVIE_KEY, movie);
         startActivity(intent);
     }
 
@@ -120,7 +130,7 @@ public class PopularMoviesFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = new ProgressDialog(getActivity(), R.style.AppTheme_Dialog);
+            progressDialog = new ProgressDialog(getActivity());
             progressDialog.setTitle("Please Wait..");
             progressDialog.setMessage("Fetching Movies List...!!");
             progressDialog.setCancelable(false);
@@ -152,7 +162,7 @@ public class PopularMoviesFragment extends Fragment {
     }
 
     private void notConnected() {
-        new AlertDialog.Builder(getContext(), R.style.AppTheme_Dialog)
+        new AlertDialog.Builder(getContext())
                 .setTitle(getString(R.string.dialog_no_network))
                 .setMessage(getString(R.string.dialog_no_network_info))
                 .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -167,6 +177,7 @@ public class PopularMoviesFragment extends Fragment {
                         updateMovies();
                     }
                 })
+                .setCancelable(false)
                 .show();
     }
 }

@@ -1,6 +1,7 @@
 package com.udacity.moviespot.core;
 
 import android.net.Uri;
+import android.os.Parcel;
 import android.util.Log;
 
 import com.udacity.moviespot.model.Movie;

@@ -1,11 +1,12 @@
 package com.udacity.moviespot.model;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by GodwinRoseSamuel on 24-Dec-15.
  */
-public class Movie implements Serializable {
+public class Movie implements Parcelable {
     private String title;
     private String posterImage;
     private String backdropImage;
@@ -14,6 +15,27 @@ public class Movie implements Serializable {
     private String userRating;
     private String popularity;
     private String votes;
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            Movie movie = new Movie();
+            movie.title = in.readString();
+            movie.posterImage = in.readString();
+            movie.backdropImage = in.readString();
+            movie.overview = in.readString();
+            movie.releaseDate = in.readString();
+            movie.userRating = in.readString();
+            movie.popularity = in.readString();
+            movie.votes = in.readString();
+            return movie;
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 
     public String getTitle() {
         return title;
@@ -90,5 +112,22 @@ public class Movie implements Serializable {
                 ", popularity='" + popularity + '\'' +
                 ", votes='" + votes + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(posterImage);
+        dest.writeString(backdropImage);
+        dest.writeString(overview);
+        dest.writeString(releaseDate);
+        dest.writeString(userRating);
+        dest.writeString(popularity);
+        dest.writeString(votes);
     }
 }

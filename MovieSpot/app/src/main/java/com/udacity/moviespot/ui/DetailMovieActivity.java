@@ -52,7 +52,7 @@ public class DetailMovieActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_movie);
         ButterKnife.bind(this);
-        movie = (Movie) getIntent().getSerializableExtra(Utility.MOVIE);
+        movie = (Movie) getIntent().getParcelableExtra(Utility.MOVIE_KEY);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -86,8 +86,19 @@ public class DetailMovieActivity extends AppCompatActivity {
 
         String posterImageUrl = Utility.getImageUrl(POSTER_WIDTH, movie.getPosterImage());
         String backdropImageUrl = Utility.getImageUrl(BACKDROP_WIDTH, movie.getBackdropImage());
-        Picasso.with(this).load(posterImageUrl).into(moviePosterImage);
-        Picasso.with(this).load(backdropImageUrl).into(movieBackdropImage);
+
+        Picasso.with(this)
+                .load(posterImageUrl)
+                .placeholder(R.drawable.movie_placeholder)
+                .error(R.drawable.error_placeholder)
+                .into(moviePosterImage);
+
+        Picasso.with(this)
+                .load(backdropImageUrl)
+                .placeholder(R.drawable.movie_placeholder)
+                .error(R.drawable.error_placeholder)
+                .into(movieBackdropImage);
+
         moviePosterImage.setAdjustViewBounds(true);
     }
 }
